@@ -45,3 +45,6 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
   `tick_size == 10^-digits`, and the volume limits. `check_data.py` prints a WARNING if any fail.
 - **Why:** These numbers drive position sizing. The first reported tick value (0.1) was 10× off
   what the other specs imply, and a silent mistake like that would make every trade the wrong size.
+- **Outcome:** MT5's Specification window really does display 0.1, but a live 0.01-lot demo
+  trade proved the true value is 1.0 ($2.08 move → $2.08 profit). **Rule: measured P/L beats
+  displayed specs.** Re-run this test whenever the broker or account changes.

@@ -5,19 +5,21 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 1: Gold basics + historical data (almost done: code built, 12 tests pass)
-- **Last completed:** Step 0: Project setup (2026-11-09, first commit `f24019b`)
-- **Next action:** The user re-checks **tick value** in the MT5 Specification window (they reported
-  0.1; it should be 1.0 = 0.01 × 100) and fixes `config/settings.toml` until
-  `python -m scripts.check_data` shows no WARNING. The user also answers the lot-size quiz
-  (0.05 lots, +$12 → $60) and commits Step 1. Then mark Step 1 done and start Step 2 (indicators).
-- **Open questions / blockers:** Broker not chosen yet (using MetaQuotes-Demo). Tick value pending.
+- **Current step:** Step 2: Indicators by hand (not started)
+- **Last completed:** Step 1: Gold basics + historical data (2026-11-09, commit `86fd1fb`)
+- **Next action:** Start Step 2: teach EMA, true range/ATR, and lookahead bias; build
+  `goldbot/indicators.py` + tests. (The user should commit the tick_value fix first.)
+- **Open questions / blockers:**
+  - Broker not chosen yet (using MetaQuotes-Demo).
+- **Account facts (demo):** USD account, balance ≈ $2,547, leverage 1:100. Tick value proven = 1.0
+  by a live demo trade (MT5's Specification window wrongly displays 0.1). See D-6.
+- **Git:** remote is named `GoldBot` (not `origin`) → https://github.com/Rehan517/GoldBot.git
 
 ## Roadmap checklist (details per step: [docs/ROADMAP.md](docs/ROADMAP.md))
 
 Phase A: Mac (research and backtesting)
 - [x] 0. Project setup: git, venv, skeleton, smoke tests
-- [ ] 1. Gold basics + export historical data from MT5 → `goldbot/data.py`, `scripts/check_data.py`, `config/settings.toml`
+- [x] 1. Gold basics + export historical data from MT5 → `goldbot/data.py`, `scripts/check_data.py`, `config/settings.toml`
 - [ ] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
 - [ ] 3. Strategy as a pure function → `goldbot/strategy.py`
 - [ ] 4. Risk and position sizing → `goldbot/risk.py`

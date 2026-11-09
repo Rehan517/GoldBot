@@ -28,9 +28,14 @@ Format: date, step, what was done, what was learned, what's left over.
 - Busiest server hours: 15:00–17:00 (the US open / US data releases).
 
 **Left over**
-- [ ] Tick value: the user reported 0.1, but tick_size × contract_size = 1.0. Re-check in MT5.
-- [ ] Quiz answer (0.05 lots, +$12 move).
-- [ ] Commit Step 1.
+- [x] Tick value: MT5's Specification window shows 0.1, but a live demo test proved **1.0**
+      (0.01 lot bought at 4095.12; at 4097.20 the profit was +$2.08, so profit ÷ move = 1.00).
+      The margin agrees: $40.95 for 0.01 lot at 1:100 = 1 oz. Config fixed, and the warning is gone.
+      Demo account: USD, balance ≈ $2,547.
+- [x] Quiz: 0.05 lots, +$12 move → $60 (correct).
+- [x] Committed and pushed (`86fd1fb`) to GitHub (remote `GoldBot`).
+
+**Step 1 complete.**
 
 ---
 

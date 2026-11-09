@@ -2,7 +2,7 @@
 
 A rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, built step by step.
 
-> **Status:** Step 1 (gold basics + historical data). Demo account only. No real money until Step 12.
+> **Status:** Step 2 (indicators by hand). Demo account only. No real money until Step 12.
 
 ## How it's organised
 

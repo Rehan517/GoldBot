@@ -7,7 +7,10 @@ name = "XAUUSD"
 digits = 2               # decimal places in the price (3000.45 -> 2)
 contract_size = 100.0    # ounces of gold in 1.00 lot
 tick_size = 0.01         # smallest price step, in $
-tick_value = 0.1         # $ P/L of a one-tick move on 1.00 lot  (CHECK: expected 0.01 x 100 = 1.0)
+# $ P/L of a one-tick ($0.01) move on 1.00 lot. MT5's Specification window displays 0.1, but a
+# live demo test proved 1.0: 0.01 lot, 4095.12 -> 4097.20 (+$2.08 move) = +$2.08 profit (2026-11-09).
+# Re-verify with a real trade (and mt5.symbol_info().trade_tick_value) whenever the broker changes.
+tick_value = 1.0
 volume_min = 0.01        # smallest order, in lots
 volume_step = 0.01       # lot sizes must be a multiple of this
 volume_max = 100.0       # largest single order, in lots
