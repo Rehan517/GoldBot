@@ -1,0 +1,21 @@
+# --- Python ---------------------------------------------------------------
+# The virtual environment is machine-specific (Mac vs Windows VPS) and can be
+# rebuilt any time from requirements.txt, so it never goes into git.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Secrets: NEVER commit -----------------------------------------------
+# .env will hold your MT5 login, password and server name.
+.env
+
+# --- Market data and runtime output --------------------------------------
+# Large and re-downloadable/re-generatable, so keep them out of git.
+data/
+logs/
+results/
+
+# --- OS / editor ----------------------------------------------------------
+.DS_Store
+.vscode/

@@ -1,0 +1,10 @@
+# Core dependencies (Mac + VPS). Versions are pinned so both machines run
+# exactly the same code paths. Install with:  pip install -r requirements.txt
+pandas==3.1.1        # tables of price bars (DataFrames)
+numpy==2.5.4         # fast maths underneath pandas
+matplotlib==3.11.2   # charts: price, indicators, equity curves
+pytest==9.2.0        # runs our automated tests in tests/
+
+# Added later in the roadmap:
+#   backtesting      (Step 6, cross-check our backtester)
+#   MetaTrader5      (Step 7, Windows VPS only - goes in requirements-windows.txt)
