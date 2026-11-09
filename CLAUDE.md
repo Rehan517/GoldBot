@@ -5,12 +5,13 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 1: Gold basics + export historical data (not started)
-- **Last completed:** Step 0: Project setup (2026-11-09)
-- **Next action:** User finishes Step 0's "your turn" tasks (activate venv, select interpreter in
-  VS Code, make the first git commit). Then teach Step 1 concepts and have the user open the XAUUSD
-  Specification window in Mac MT5.
-- **Open questions / blockers:** Broker not chosen yet (using MetaQuotes-Demo).
+- **Current step:** Step 1: Gold basics + historical data (almost done: code built, 12 tests pass)
+- **Last completed:** Step 0: Project setup (2026-11-09, first commit `f24019b`)
+- **Next action:** The user re-checks **tick value** in the MT5 Specification window (they reported
+  0.1; it should be 1.0 = 0.01 × 100) and fixes `config/settings.toml` until
+  `python -m scripts.check_data` shows no WARNING. The user also answers the lot-size quiz
+  (0.05 lots, +$12 → $60) and commits Step 1. Then mark Step 1 done and start Step 2 (indicators).
+- **Open questions / blockers:** Broker not chosen yet (using MetaQuotes-Demo). Tick value pending.
 
 ## Roadmap checklist (details per step: [docs/ROADMAP.md](docs/ROADMAP.md))
 

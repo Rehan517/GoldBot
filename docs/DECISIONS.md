@@ -39,3 +39,9 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
 - **Choice:** Symbol name, contract specs, and server live in `config/settings.toml` / `.env`.
 - **Why:** No broker has been chosen yet. Gold symbol names (XAUUSD / GOLD / XAUUSD.m), contract
   sizes, and spreads differ between brokers, so switching should be a config change only.
+
+### D-6: Sanity-check symbol specs in code (2026-11-09)
+- **Choice:** `check_symbol_specs` verifies `tick_value == tick_size × contract_size`,
+  `tick_size == 10^-digits`, and the volume limits. `check_data.py` prints a WARNING if any fail.
+- **Why:** These numbers drive position sizing. The first reported tick value (0.1) was 10× off
+  what the other specs imply, and a silent mistake like that would make every trade the wrong size.

@@ -1,0 +1,31 @@
+# GoldBot settings.
+# Broker-specific values come from MT5: right-click XAUUSD -> Specification.
+# If you change broker, this file is the ONLY place that should need editing.
+
+[symbol]
+name = "XAUUSD"
+digits = 2               # decimal places in the price (3000.45 -> 2)
+contract_size = 100.0    # ounces of gold in 1.00 lot
+tick_size = 0.01         # smallest price step, in $
+tick_value = 0.1         # $ P/L of a one-tick move on 1.00 lot  (CHECK: expected 0.01 x 100 = 1.0)
+volume_min = 0.01        # smallest order, in lots
+volume_step = 0.01       # lot sizes must be a multiple of this
+volume_max = 100.0       # largest single order, in lots
+stops_level = 0          # min distance (points) between price and SL/TP; 0 = no minimum
+spread_type = "floating" # spread changes with market conditions
+profit_currency = "USD"
+margin_currency = "USD"
+swap_long = -12.6        # overnight fee for holding a buy (charged at rollover)
+swap_short = -4.6        # overnight fee for holding a sell
+trading_session = "00:00-23:00"   # server time; the gap 23:00-00:00 is the daily break
+
+[data]
+# Paths are relative to the project root.
+h1_file = "data/raw/XAUUSD_H1.csv"
+m15_file = "data/raw/XAUUSD_M15.csv"
+# Server time zone (from scripts/check_data.py + export timestamp, 2026-11-09):
+#   export saved 08:12 UTC, last bar stamped 10:00 server time  ->  server = UTC+2 now (US winter).
+#   Most brokers switch to UTC+3 during US daylight saving; confirm when we build the session filter.
+#   New York time = server time - 7h all year round.
+server_utc_offset_hours = 2
+# Daily break: ~23:00-00:00 server time until early 2026, then 22:00-01:00 (bars run 01:00-22:00).
