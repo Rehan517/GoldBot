@@ -5,6 +5,42 @@ Format: date, step, what was done, what was learned, what's left over.
 
 ---
 
+## 2026-11-10: Step 5 (Our own backtester)
+
+**Done**
+- Taught: the order of each simulated bar (enter → exit → record equity → signal), bid/ask
+  conventions, pessimistic rules (spread floor 25 pts, 5 pts slippage on entries and stops, SL
+  first when both are hit in one bar, gap through the SL fills at the open, gap through the TP
+  fills at the TP), swap (Wed ×3, weekends free), and the metrics (win rate, avg R, PF, drawdown,
+  losing streak).
+- Config `[backtest]`: initial_equity 3000, min_spread_points 25, slippage_points 5,
+  commission_per_lot 0.
+- Built `goldbot/backtest.py` (`run_backtest` with an injectable `signal_fn`, `Costs`,
+  `swap_nights`), `goldbot/metrics.py` (`summarize`, `max_drawdown`, `longest_losing_streak`),
+  `scripts/run_backtest.py` (summary, by-year table, `results/trades_H1.csv`,
+  `results/equity_H1.png`), and `tests/test_backtest.py`. **76 tests pass.**
+
+**Results: Strategy v1, H1, 2018-01 → 2026-11, $3,000 start**
+| Costs | avg R | PF | Net |
+|---|---|---|---|
+| None | +0.054 | 1.08 | +$499 |
+| Demo spreads only | +0.046 | 1.06 | +$343 |
+| **Pessimistic (default)** | **−0.001** | **0.97** | **−$183** |
+
+320 trades, 9 skipped, win rate 34.1% (breakeven ≈33%), max DD $798 (24.4%), worst losing streak
+12, avg hold 9 bars, swap −$73. Profitable years: 2020–22, 2024–25. Losing years: 2018–19, 2023,
+2026. **Conclusion: v1 has at most a tiny gross edge, and realistic costs erase it.** Step 6
+investigates, with out-of-sample discipline.
+
+Note: avg R ≈ 0 but net −$183 because the $ risk per trade varies (min-lot effects and rounding),
+so $ results and R results don't line up exactly.
+
+**Left over**
+- [ ] The user explains the first trades in `results/trades_H1.csv`.
+- [ ] Commit Step 5.
+
+---
+
 ## 2026-11-10: Step 4 (Risk and position sizing)
 
 **Done**
@@ -23,9 +59,16 @@ size to 0.01 lot: 17 under 1%, 15 between 1% and 1.5% (min lot used), and 3 skip
 $46–87 would risk 1.8–3.4%). There's effectively no sizing at this equity; risk just floats with
 the stop distance.
 
-**Left over**
-- [ ] By-hand exercise + the user's planned live account size.
-- [ ] Commit Step 4.
+**Exercise:** the user sized (a) $2,547 with an $18 stop → 0.01 lots, 0.71% and (b) $20,000 with
+a $26 stop → 0.07 lots, 0.91%. Both correct. The user didn't know why the results were under 1%,
+so we explained: rounding down discards up to one 0.01 step, and one step is 71% of the ideal
+size in (a) but only 13% in (b).
+
+**Account size decided:** $3,000 live, plus a matching $3,000 demo. Suggested choosing the broker
+first and opening the demo with them. At $3,000: 23 ok / 9 min-lot / 3 skipped over the last 12
+months.
+
+Committed: `5f53a7d`. **Step 4 complete.**
 
 ---
 

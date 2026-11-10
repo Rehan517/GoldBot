@@ -5,14 +5,19 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 4: Risk and position sizing (code built, 54 tests pass; user exercise
-  pending)
-- **Last completed:** Step 3: Strategy as a pure function (2026-11-10, commit `fa67069`)
-- **Next action:** The user does the by-hand sizing exercise, tells us the **planned live account
-  size**, and commits. Then mark Step 4 done and start Step 5 (backtester).
-- **Key Step 4 finding:** at $2,547, every recent H1 signal sizes to the minimum 0.01 lot (risk
-  varies 0.68%–1.47%; 3 of 35 signals skipped by the 1.5% ceiling). Position sizing only becomes
-  fine-grained at much larger equity, or with smaller stops (e.g. M15).
+- **Current step:** Step 5: Our own backtester (code built, 76 tests pass; user review of the
+  trades pending)
+- **Last completed:** Step 4: Risk and position sizing (2026-11-10, commit `5f53a7d`)
+- **Next action:** The user explains the first trades in `results/trades_H1.csv` (exercise in
+  chat) and commits. Then start Step 6 (validation). **Do NOT tweak the strategy before Step 6:**
+  changes must be judged out-of-sample.
+- **Step 5 headline result (2026-11-10):** v1 on H1 2018–2026, $3,000 start, pessimistic costs:
+  320 trades, win 34.1%, **avg −0.001R, PF 0.97, −$183 (−6.1%)**, max DD 24.4%, worst losing
+  streak 12. Gross edge before costs: +0.054R (PF 1.08). Costs consume the whole edge. With demo
+  spreads only: +0.046R.
+- **Planned account size: $3,000** live, plus a matching $3,000 demo. Recommended: pick the
+  broker first and open the demo with that broker (needed by Step 7). At $3,000, the last 12
+  months of H1 signals size as 23 ok / 9 min-lot (1–1.5%) / 3 skipped, i.e. almost always 0.01 lot.
 - **Open questions / blockers:**
   - Broker not chosen yet (using MetaQuotes-Demo).
   - The user is interested in **scalping** (several trades per day), partly so testing goes
@@ -36,7 +41,7 @@ Phase A: Mac (research and backtesting)
 - [x] 1. Gold basics + export historical data from MT5 → `goldbot/data.py`, `scripts/check_data.py`, `config/settings.toml`
 - [x] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
 - [x] 3. Strategy as a pure function → `goldbot/strategy.py`
-- [ ] 4. Risk and position sizing → `goldbot/risk.py`
+- [x] 4. Risk and position sizing → `goldbot/risk.py`
 - [ ] 5. Our own backtester + metrics → `goldbot/backtest.py`, `goldbot/metrics.py`
 - [ ] 6. Validation: `backtesting.py` cross-check, out-of-sample, parameter sweeps
 

@@ -72,3 +72,23 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
   0.01 lot often exceeds 1% with H1 stops of about $26, so a strict 1% rule would skip most
   trades. The ceiling allows them while still blocking very wide-stop trades (3 of 35 in the
   last year).
+
+### D-10: Plan around a $3,000 account (2026-11-10)
+- **Choice:** Live starting balance $3,000, a matching $3,000 demo, and backtests starting at $3,000.
+- **Why:** The backtest, demo and live account should behave identically. At this size the bot
+  almost always trades 0.01 lot on H1, which is fine for learning with real money. Ideally the
+  demo is with the same broker as the eventual live account.
+
+### D-11: Pessimistic backtest assumptions (2026-11-10)
+- **Choice:**
+  - Fill at the next bar's open.
+  - Spread = max(bar spread, 25 points). Slippage of 5 points on entries and stop exits; none
+    on take profits.
+  - SL assumed first if SL and TP are both inside one bar. A gap through the SL fills at the
+    open; a gap through the TP fills at the TP.
+  - Swap with Wed ×3 and weekends free.
+  - The signal function is injected, so the engine is tested with scripted signals.
+- **Why:** A backtest should understate, not overstate, live results. MetaQuotes-Demo spreads
+  (median 5–8 points) are tighter than typical real accounts.
+- **Consequence:** v1's gross edge (+0.054R) disappears under these costs (−0.001R). That's
+  exactly the kind of truth this choice is meant to surface.

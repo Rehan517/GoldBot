@@ -43,6 +43,14 @@ risk_per_trade_pct = 1.0       # target: lose this % of equity if the stop loss 
 # Matters for small accounts: on $2,547 a $26 stop at 0.01 lot already risks ~1.02%.
 max_risk_per_trade_pct = 1.5
 
+[backtest]
+initial_equity = 3000.0    # matches the planned live account (D-10)
+# Pessimistic costs. The bar's own spread is used if it's WIDER than this floor.
+min_spread_points = 25     # $0.25. Demo median is only 5-8 points; real retail accounts are often wider.
+slippage_points = 5        # $0.05 worse on every market entry and every stop-loss exit
+commission_per_lot = 0.0   # $ per 1.00 lot, round trip (MetaQuotes-Demo charges none; ECN brokers do)
+# Swap comes from [symbol] swap_long / swap_short (points per lot per night).
+
 [data]
 # Paths are relative to the project root.
 h1_file = "data/raw/XAUUSD_H1.csv"
