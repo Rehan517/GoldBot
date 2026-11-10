@@ -5,16 +5,25 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 5: Our own backtester (code built, 76 tests pass; user review of the
-  trades pending)
-- **Last completed:** Step 4: Risk and position sizing (2026-11-10, commit `5f53a7d`)
-- **Next action:** The user explains the first trades in `results/trades_H1.csv` (exercise in
-  chat) and commits. Then start Step 6 (validation). **Do NOT tweak the strategy before Step 6:**
-  changes must be judged out-of-sample.
+- **Current step:** Step 6: Validation. Parts 1–2 done (cross-check, in-sample sweep);
+  **Part 3 next**: experiments (session filter on/off, M15, end-of-day exit, exit-plateau
+  candidate SL 2.0×ATR / RR 2.5–3) on IN-SAMPLE, then ONE out-of-sample look at ≤3 candidates
+  and a decision. 79 tests pass.
+- **Last completed:** Step 5: Our own backtester (2026-11-10, commit `22d952b`)
+- **Next action:** The user commits Step 6 Parts 1–2. Then Part 3. **The out-of-sample period
+  (2024-01-01 →) is SEALED**: don't run anything on it until the candidates are fixed.
+- **Step 6 findings so far:**
+  - Cross-check vs backtesting.py (zero costs, same signals): 322/322 same entries, 98.4% same
+    exits. The remaining 5 differ by one bar because of SL anchoring (fill vs signal close).
+    Engine confirmed.
+  - In-sample sweep (2018–2023, pessimistic costs): entry grid (EMA fast×slow) has **no
+    plateau** (mostly negative). Exit grid shows a **mild plateau** at wider stops + bigger
+    targets (SL 2.0–2.5×ATR, RR 2.5–3.0: +0.06 to +0.08R). But the best cell has t ≈ 0.7
+    (std error ±0.11R): **not statistically significant**.
 - **Step 5 headline result (2026-11-10):** v1 on H1 2018–2026, $3,000 start, pessimistic costs:
   320 trades, win 34.1%, **avg −0.001R, PF 0.97, −$183 (−6.1%)**, max DD 24.4%, worst losing
-  streak 12. Gross edge before costs: +0.054R (PF 1.08). Costs consume the whole edge. With demo
-  spreads only: +0.046R.
+  streak 12. Truly zero-cost edge: +0.073R. With demo bar spreads only: +0.054R; with demo
+  spreads + swap: +0.046R. Costs consume the whole edge.
 - **Planned account size: $3,000** live, plus a matching $3,000 demo. Recommended: pick the
   broker first and open the demo with that broker (needed by Step 7). At $3,000, the last 12
   months of H1 signals size as 23 ok / 9 min-lot (1–1.5%) / 3 skipped, i.e. almost always 0.01 lot.
@@ -42,7 +51,7 @@ Phase A: Mac (research and backtesting)
 - [x] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
 - [x] 3. Strategy as a pure function → `goldbot/strategy.py`
 - [x] 4. Risk and position sizing → `goldbot/risk.py`
-- [ ] 5. Our own backtester + metrics → `goldbot/backtest.py`, `goldbot/metrics.py`
+- [x] 5. Our own backtester + metrics → `goldbot/backtest.py`, `goldbot/metrics.py`
 - [ ] 6. Validation: `backtesting.py` cross-check, out-of-sample, parameter sweeps
 
 Phase B: Windows VPS (connection and execution)

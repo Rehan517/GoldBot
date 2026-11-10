@@ -40,6 +40,18 @@ def load_mt5_csv(path: str | Path) -> pd.DataFrame:
     return df
 
 
+def file_time_in_server_time(path: str | Path, server_utc_offset_hours: int) -> pd.Timestamp:
+    """When was this export saved, in broker server time? (Used to drop the forming bar.)"""
+    saved_utc = pd.Timestamp(Path(path).stat().st_mtime, unit="s")   # file timestamps are UTC-based
+    return saved_utc + pd.Timedelta(hours=server_utc_offset_hours)
+
+
+def load_closed_bars(path: str | Path, timeframe: str, server_utc_offset_hours: int) -> pd.DataFrame:
+    """Load an MT5 export and drop the last bar if it was still forming when exported."""
+    bars = load_mt5_csv(path)
+    return drop_forming_bar(bars, file_time_in_server_time(path, server_utc_offset_hours), timeframe)
+
+
 def drop_forming_bar(bars: pd.DataFrame, now: pd.Timestamp, timeframe: str) -> pd.DataFrame:
     """Remove the last bar if it hasn't closed yet at time `now` (both in server time).
 

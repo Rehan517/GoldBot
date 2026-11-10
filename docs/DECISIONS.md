@@ -92,3 +92,12 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
   (median 5–8 points) are tighter than typical real accounts.
 - **Consequence:** v1's gross edge (+0.054R) disappears under these costs (−0.001R). That's
   exactly the kind of truth this choice is meant to surface.
+
+### D-12: In-sample 2018–2023, out-of-sample 2024 → (sealed) (2026-11-10)
+- **Choice:** All tuning and experiments run on 2018-01 → 2023-12. The 2024-01 → 2026-11 period
+  is looked at once, only for a short list of (≤3) fixed candidates.
+- **Why:** Looking at test data repeatedly turns it into training data, which is overfitting
+  by another route. Caveat: v1's yearly 2024–26 results were seen in Step 5 (no tuning was done
+  on them).
+- **Also:** judge results by statistical significance, not just sign. With about 200 trades,
+  the standard error of average R is about ±0.1R, so small edges are hard to prove.

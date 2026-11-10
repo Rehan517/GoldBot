@@ -9,14 +9,8 @@ Run from the project root:   python -m scripts.show_signals
 import pandas as pd
 
 from goldbot.config import PROJECT_ROOT, load_settings
-from goldbot.data import drop_forming_bar, load_mt5_csv
+from goldbot.data import load_closed_bars
 from goldbot.strategy import StrategyParams, add_indicators, evaluate_bar
-
-
-def export_time_in_server_time(path, server_utc_offset_hours: int) -> pd.Timestamp:
-    """When was the file saved, expressed in broker server time? (Used to drop the forming bar.)"""
-    saved_utc = pd.Timestamp(path.stat().st_mtime, unit="s")   # file timestamps are UTC-based
-    return saved_utc + pd.Timedelta(hours=server_utc_offset_hours)
 
 
 def main() -> None:
@@ -24,9 +18,7 @@ def main() -> None:
     params = StrategyParams.from_settings(settings["strategy"])
     path = PROJECT_ROOT / settings["data"]["h1_file"]
 
-    bars = load_mt5_csv(path)
-    now = export_time_in_server_time(path, settings["data"]["server_utc_offset_hours"])
-    bars = drop_forming_bar(bars, now, params.timeframe)
+    bars = load_closed_bars(path, params.timeframe, settings["data"]["server_utc_offset_hours"])
     bars = add_indicators(bars, params)   # once, on all history (safe: indicators are causal)
 
     # Walk forward bar by bar, exactly as the live bot would see them.

@@ -5,6 +5,35 @@ Format: date, step, what was done, what was learned, what's left over.
 
 ---
 
+## 2026-11-10: Step 6, Parts 1–2 (Cross-check + in-sample sweep)
+
+**Part 1: cross-check with backtesting.py 0.6.6** (`scripts/cross_check.py`)
+- Same signals and zero costs in both engines → 322/322 same entries, **98.4% same exits**,
+  avg R +0.073 vs +0.079. The 5 mismatches are off by one bar because SL/TP are anchored to the
+  fill (ours) vs the signal close (backtesting.py).
+- The first run showed only 94.7% matching. The cause was the cross-check itself: our engine
+  uses max(bar spread, floor), so "zero costs" also needed the spread column zeroed. This also
+  showed that Step 5's "no costs" row was mislabeled (corrected in that entry).
+
+**Part 2: in-sample / out-of-sample split** (config `[validation]`)
+- In-sample = 2018-01 → 2023-12. Out-of-sample = 2024-01 → 2026-11, **sealed**.
+- New `goldbot/validation.py` (`backtest_period`: indicators computed on full history, then
+  sliced). `load_closed_bars` + `file_time_in_server_time` moved into `goldbot/data.py`.
+  `tests/test_validation.py` added. **79 tests pass.**
+- `scripts/sweep.py`: 50 in-sample backtests → `results/sweep_entry.png`, `sweep_exit.png`.
+  - Entry grid (EMA fast 10–30 × slow 40–100): mostly negative, no plateau. Fast EMAs (10) are
+    worst (−0.08 to −0.19R).
+  - Exit grid (SL 1–3×ATR × RR 1–3): a mild green region at SL 2.0–2.5 / RR 2.5–3.0 (+0.06 to
+    +0.08R), i.e. "wider stops, let winners run". v1's own cell (1.5/2.0) is −0.027R.
+  - **Significance check:** the best cell is +0.081R ± 0.110 (t ≈ 0.74, n = 219). Not
+    distinguishable from zero; ~2 is needed.
+
+**Left over**
+- [ ] Commit Parts 1–2.
+- [ ] Part 3: experiments + one out-of-sample look + decision.
+
+---
+
 ## 2026-11-10: Step 5 (Our own backtester)
 
 **Done**
@@ -23,8 +52,9 @@ Format: date, step, what was done, what was learned, what's left over.
 **Results: Strategy v1, H1, 2018-01 → 2026-11, $3,000 start**
 | Costs | avg R | PF | Net |
 |---|---|---|---|
-| None | +0.054 | 1.08 | +$499 |
-| Demo spreads only | +0.046 | 1.06 | +$343 |
+| Truly zero (spread column zeroed; found in Step 6) | +0.073 | | |
+| Demo bar spreads, no slippage/swap (*was mislabeled "None"*) | +0.054 | 1.08 | +$499 |
+| Demo bar spreads + swap | +0.046 | 1.06 | +$343 |
 | **Pessimistic (default)** | **−0.001** | **0.97** | **−$183** |
 
 320 trades, 9 skipped, win rate 34.1% (breakeven ≈33%), max DD $798 (24.4%), worst losing streak
@@ -35,9 +65,8 @@ investigates, with out-of-sample discipline.
 Note: avg R ≈ 0 but net −$183 because the $ risk per trade varies (min-lot effects and rounding),
 so $ results and R results don't line up exactly.
 
-**Left over**
-- [ ] The user explains the first trades in `results/trades_H1.csv`.
-- [ ] Commit Step 5.
+The user skipped the trade-explanation questions; answers were given (slippage on the stop exit,
+overnight swap, smaller stops in 2018 → bigger lots). Committed `22d952b`. **Step 5 complete.**
 
 ---
 

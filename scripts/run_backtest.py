@@ -9,10 +9,9 @@ import pandas as pd
 
 from goldbot.backtest import Costs, run_backtest
 from goldbot.config import PROJECT_ROOT, load_settings
-from goldbot.data import drop_forming_bar, load_mt5_csv
+from goldbot.data import load_closed_bars
 from goldbot.metrics import summarize
 from goldbot.strategy import StrategyParams, add_indicators, evaluate_bar
-from scripts.show_signals import export_time_in_server_time
 
 
 def print_summary(stats: dict, initial_equity: float) -> None:
@@ -67,9 +66,7 @@ def main() -> None:
     initial = settings["backtest"]["initial_equity"]
 
     path = PROJECT_ROOT / settings["data"]["h1_file"]
-    bars = load_mt5_csv(path)
-    bars = drop_forming_bar(bars, export_time_in_server_time(path, settings["data"]["server_utc_offset_hours"]),
-                            params.timeframe)
+    bars = load_closed_bars(path, params.timeframe, settings["data"]["server_utc_offset_hours"])
     bars = add_indicators(bars, params)
 
     print(f"Backtest: {bars.index[0]} -> {bars.index[-1]}  ({len(bars):,} H1 bars)")
