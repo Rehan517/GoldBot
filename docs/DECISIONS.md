@@ -63,3 +63,12 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
 - **Why:** These are the most active hours (from check_data.py's activity profile).
   **Unproven:** it blocked the Nov 4 2026 cross, which would have been a big winner. Test it on
   vs off in Step 6.
+
+### D-9: 1% target risk with a 1.5% ceiling; always round down (2026-11-10)
+- **Choice:** Size each trade to risk 1% of equity, rounded DOWN to the 0.01 lot step. If that
+  rounds below the minimum lot, trade 0.01 lot only if its risk is ≤ 1.5% of equity; otherwise
+  skip the trade.
+- **Why:** Rounding down means we never exceed the target. On a small account (~$2,547), even
+  0.01 lot often exceeds 1% with H1 stops of about $26, so a strict 1% rule would skip most
+  trades. The ceiling allows them while still blocking very wide-stop trades (3 of 35 in the
+  last year).

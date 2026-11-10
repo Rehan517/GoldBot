@@ -37,6 +37,12 @@ use_session_filter = true
 session_start_hour = 10
 session_end_hour = 20
 
+[risk]
+risk_per_trade_pct = 1.0       # target: lose this % of equity if the stop loss is hit
+# Hard ceiling. If even the minimum lot (0.01) would risk more than this %, SKIP the trade.
+# Matters for small accounts: on $2,547 a $26 stop at 0.01 lot already risks ~1.02%.
+max_risk_per_trade_pct = 1.5
+
 [data]
 # Paths are relative to the project root.
 h1_file = "data/raw/XAUUSD_H1.csv"

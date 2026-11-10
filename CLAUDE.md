@@ -5,15 +5,24 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 3: Strategy as a pure function (code built, 37 tests pass; user
-  verification pending)
-- **Last completed:** Step 2: Indicators by hand (2026-11-10, commit `49120c6`)
-- **Next action:** The user checks one signal on the MT5 chart (2026-10-29 11:00 sell: EMA20
-  crosses below EMA50 on that bar, close below EMA200). They also do the exercise of turning
-  `use_session_filter` off, re-running `python -m scripts.show_signals`, and turning it back on.
-  Then they commit, and we start Step 4 (risk and position sizing).
+- **Current step:** Step 4: Risk and position sizing (code built, 54 tests pass; user exercise
+  pending)
+- **Last completed:** Step 3: Strategy as a pure function (2026-11-10, commit `fa67069`)
+- **Next action:** The user does the by-hand sizing exercise, tells us the **planned live account
+  size**, and commits. Then mark Step 4 done and start Step 5 (backtester).
+- **Key Step 4 finding:** at $2,547, every recent H1 signal sizes to the minimum 0.01 lot (risk
+  varies 0.68%–1.47%; 3 of 35 signals skipped by the 1.5% ceiling). Position sizing only becomes
+  fine-grained at much larger equity, or with smaller stops (e.g. M15).
 - **Open questions / blockers:**
   - Broker not chosen yet (using MetaQuotes-Demo).
+  - The user is interested in **scalping** (several trades per day), partly so testing goes
+    faster. The code supports other timeframes via config. Risks: spread and slippage become a
+    large fraction of small stops; demo fills and MetaQuotes-Demo spreads are optimistic; bar data
+    is less precise for small stops. Planned as a Step 6 experiment (M15, plus M5 if exported)
+    with **pessimistic spread + slippage**, compared against H1 on cost-adjusted results.
+    Estimated signals/year (2026-11-10): M15 ~160 (session on) / ~290 (off), H1 ~37 / ~73.
+  - **Trade frequency vs forward test:** ~37 signals/year means 30 demo trades ≈ 10 months.
+    Resolve in Step 6.
 - **Account facts (demo):** MetaQuotes-Demo, **hedging** account type, USD, balance ≈ $2,547,
   leverage 1:100. Tick value proven = 1.0 by a live demo trade (MT5's Specification window
   wrongly displays 0.1). See D-6. The user also places manual trades on this account, so the bot
@@ -26,7 +35,7 @@ Phase A: Mac (research and backtesting)
 - [x] 0. Project setup: git, venv, skeleton, smoke tests
 - [x] 1. Gold basics + export historical data from MT5 → `goldbot/data.py`, `scripts/check_data.py`, `config/settings.toml`
 - [x] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
-- [ ] 3. Strategy as a pure function → `goldbot/strategy.py`
+- [x] 3. Strategy as a pure function → `goldbot/strategy.py`
 - [ ] 4. Risk and position sizing → `goldbot/risk.py`
 - [ ] 5. Our own backtester + metrics → `goldbot/backtest.py`, `goldbot/metrics.py`
 - [ ] 6. Validation: `backtesting.py` cross-check, out-of-sample, parameter sweeps

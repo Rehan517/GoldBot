@@ -5,6 +5,30 @@ Format: date, step, what was done, what was learned, what's left over.
 
 ---
 
+## 2026-11-10: Step 4 (Risk and position sizing)
+
+**Done**
+- Taught: R-multiples (breakeven win rate at 2R targets = 33%), fixed-fractional sizing,
+  rounding DOWN to the volume step, min/max lot, and the float trap (0.29/0.01 = 28.999…).
+- Config `[risk]`: `risk_per_trade_pct = 1.0` and `max_risk_per_trade_pct = 1.5` (if even the
+  minimum lot exceeds the ceiling, skip the trade).
+- Built `goldbot/risk.py` (`loss_per_lot`, `round_down_to_step`, `position_size` →
+  `PositionSize(lots, risk_money, risk_pct, note)`) and `tests/test_risk.py`. **54 tests pass.**
+- Built `scripts/position_size.py`: a calculator (`--equity --stop`), or sizing of the last 12
+  months of real signals for a given equity.
+- Checkpoint example: $10,000, $15 stop → 0.06 lots, $90 (0.9%). Matches.
+
+**Finding: account size vs minimum lot.** At $2,547, all 35 signals from the last 12 months
+size to 0.01 lot: 17 under 1%, 15 between 1% and 1.5% (min lot used), and 3 skipped (stops of
+$46–87 would risk 1.8–3.4%). There's effectively no sizing at this equity; risk just floats with
+the stop distance.
+
+**Left over**
+- [ ] By-hand exercise + the user's planned live account size.
+- [ ] Commit Step 4.
+
+---
+
 ## 2026-11-10: Step 3 (Strategy as a pure function)
 
 **Done**
@@ -27,10 +51,14 @@ Format: date, step, what was done, what was learned, what's left over.
   **blocked by the session filter** (entry 08:00 < 10:00), and gold then rallied more than $100.
   Lesson: filters block winners too, so test session filter on vs off in Step 6.
 
-**Left over**
-- [ ] The user verifies the 2026-10-29 11:00 sell signal on the MT5 chart.
-- [ ] Exercise: turn the session filter off, compare the signal count, turn it back on.
-- [ ] Commit Step 3.
+**User tasks (all done):** verified the 2026-10-29 sell on the MT5 chart, did the session filter
+exercise (H1 without the filter gives ~648 signals vs 329), and committed (`fa67069`).
+
+**Side discussion:** the user is interested in scalping (several trades per day). We discussed
+faster testing versus spread taking a bigger share of small stops, and added scalping variants
+with pessimistic costs to the Step 5/6 plans (see the ROADMAP and CLAUDE.md open questions).
+
+**Step 3 complete.**
 
 ---
 

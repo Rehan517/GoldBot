@@ -62,6 +62,9 @@ before moving on.
     the SL hit first (the pessimistic choice).
   - Price gaps past the SL fill at the bar's open.
   - Commission and slippage are set in config.
+  - **Swap (overnight fees)** is charged for positions held past the daily rollover.
+  - **Spread and slippage are configurable and pessimistic.** They decide whether scalping
+    variants survive in Step 6.
 - **Build:** `goldbot/backtest.py`, `goldbot/metrics.py`, `scripts/run_backtest.py` (trade list
   CSV + equity curve chart), and `tests/test_backtest.py` (tiny scenarios with known answers).
 - **Checkpoint:** the backtest runs on your exported data, you can explain every trade in the
@@ -75,7 +78,12 @@ before moving on.
   - Cross-check against `backtesting.py`: the same signals should produce the same trades, and
     P&L should be close.
   - A parameter-sweep script with a heatmap.
-  - Experiments: M15 vs H1, session filter on/off, end-of-day exit.
+  - Experiments: M15 vs H1, session filter on/off, end-of-day exit, and **scalping variants**
+    (M15, plus M5 if exported). Judge them on results *after* pessimistic spread + slippage, and
+    check how sensitive each one is to the spread assumption.
+  - **Trade frequency vs forward-test length:** H1 + session filter gives ~37 signals/year, so 30
+    demo trades would take ~10 months. Decide here how to resolve that (timeframe, filters, or a
+    longer demo period).
 - **Checkpoint:** a written-down v1 config with out-of-sample results we both believe in. If the
   edge looks bad, we change the rules here, before paying for a VPS.
 
