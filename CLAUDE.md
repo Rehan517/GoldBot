@@ -5,14 +5,19 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 2: Indicators by hand (not started)
-- **Last completed:** Step 1: Gold basics + historical data (2026-11-09, commit `86fd1fb`)
-- **Next action:** Start Step 2: teach EMA, true range/ATR, and lookahead bias; build
-  `goldbot/indicators.py` + tests. (The user should commit the tick_value fix first.)
+- **Current step:** Step 3: Strategy as a pure function (not started)
+- **Last completed:** Step 2: Indicators by hand (2026-11-10). EMA/ATR match MT5's Data Window
+  exactly (to MT5's 3 decimals).
+- **Next action:** The user commits Step 2. Then start Step 3: teach the closed-bar rule and how
+  to define a "cross" precisely; build `goldbot/strategy.py` (a `Signal` dataclass +
+  `generate_signal`) and `tests/test_strategy.py`, and add the remaining strategy params
+  (SL ATR multiple, R:R, session window) to config.
 - **Open questions / blockers:**
   - Broker not chosen yet (using MetaQuotes-Demo).
-- **Account facts (demo):** USD account, balance ≈ $2,547, leverage 1:100. Tick value proven = 1.0
-  by a live demo trade (MT5's Specification window wrongly displays 0.1). See D-6.
+- **Account facts (demo):** MetaQuotes-Demo, **hedging** account type, USD, balance ≈ $2,547,
+  leverage 1:100. Tick value proven = 1.0 by a live demo trade (MT5's Specification window
+  wrongly displays 0.1). See D-6. The user also places manual trades on this account, so the bot
+  must only touch positions carrying its own magic number (Step 8).
 - **Git:** remote is named `GoldBot` (not `origin`) → https://github.com/Rehan517/GoldBot.git
 
 ## Roadmap checklist (details per step: [docs/ROADMAP.md](docs/ROADMAP.md))
@@ -20,7 +25,7 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 Phase A: Mac (research and backtesting)
 - [x] 0. Project setup: git, venv, skeleton, smoke tests
 - [x] 1. Gold basics + export historical data from MT5 → `goldbot/data.py`, `scripts/check_data.py`, `config/settings.toml`
-- [ ] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
+- [x] 2. Indicators by hand (EMA, ATR) → `goldbot/indicators.py`
 - [ ] 3. Strategy as a pure function → `goldbot/strategy.py`
 - [ ] 4. Risk and position sizing → `goldbot/risk.py`
 - [ ] 5. Our own backtester + metrics → `goldbot/backtest.py`, `goldbot/metrics.py`

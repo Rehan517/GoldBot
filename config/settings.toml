@@ -22,6 +22,14 @@ swap_long = -12.6        # overnight fee for holding a buy (charged at rollover)
 swap_short = -4.6        # overnight fee for holding a sell
 trading_session = "00:00-23:00"   # server time; the gap 23:00-00:00 is the daily break
 
+[strategy]
+timeframe = "H1"
+ema_fast = 20            # short-term trend (entry trigger, with ema_slow)
+ema_slow = 50
+ema_trend = 200          # big-picture trend filter
+atr_period = 14          # volatility, used to size the stop loss
+# More strategy rules get added in Step 3.
+
 [data]
 # Paths are relative to the project root.
 h1_file = "data/raw/XAUUSD_H1.csv"
