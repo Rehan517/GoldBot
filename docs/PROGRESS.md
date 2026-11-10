@@ -5,6 +5,35 @@ Format: date, step, what was done, what was learned, what's left over.
 
 ---
 
+## 2026-11-10: Step 3 (Strategy as a pure function)
+
+**Done**
+- Taught: pure functions and why the backtest and live bot must share them; separation of
+  concerns (strategy vs risk vs position state vs guards); the exact definition of a cross;
+  why signals carry stop *distances*, not prices; and the closed-bar rule.
+- Added to `[strategy]` in config: `sl_atr_mult`, `reward_risk`, and the session filter
+  (entries 10:00–20:00 server time ≈ London open to NY early afternoon).
+- Built `goldbot/strategy.py`: `StrategyParams` (strict loading from config, typos rejected),
+  `Signal` (with `stop_loss_price`/`take_profit_price`), `add_indicators`, `evaluate_bar`, and
+  `generate_signal`.
+- Added `drop_forming_bar(bars, now, timeframe)` to `goldbot/data.py`.
+- Tests: `tests/test_strategy.py` (13) plus 2 closed-bar tests. **37 tests pass.**
+- Built `scripts/show_signals.py`: scans the whole history and lists signals.
+
+**Findings**
+- 329 signals over 2018–2026 (171 buy / 158 sell), about 37 per year. The median stop is $6.02
+  across all years, and about $20–35 in 2026 (gold is now around $4,000, so ATR is bigger).
+- The Nov 4 2026 bullish cross (07:00 bar, close 3997.82 just above EMA200 3995.82) was
+  **blocked by the session filter** (entry 08:00 < 10:00), and gold then rallied more than $100.
+  Lesson: filters block winners too, so test session filter on vs off in Step 6.
+
+**Left over**
+- [ ] The user verifies the 2026-10-29 11:00 sell signal on the MT5 chart.
+- [ ] Exercise: turn the session filter off, compare the signal count, turn it back on.
+- [ ] Commit Step 3.
+
+---
+
 ## 2026-11-10: Step 2 (Indicators by hand)
 
 **Done**

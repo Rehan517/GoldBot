@@ -28,7 +28,14 @@ ema_fast = 20            # short-term trend (entry trigger, with ema_slow)
 ema_slow = 50
 ema_trend = 200          # big-picture trend filter
 atr_period = 14          # volatility, used to size the stop loss
-# More strategy rules get added in Step 3.
+sl_atr_mult = 1.5        # stop loss distance = 1.5 x ATR
+reward_risk = 2.0        # take profit distance = 2 x stop distance ("2R")
+# Session filter: only ENTER trades when the entry time (= signal bar's close) is within
+# [session_start_hour, session_end_hour) in SERVER time. Server - 7h = New York, server - 2h ~ London.
+# 10:00-20:00 server ~ 08:00 London open to 13:00 New York (the busiest hours, see check_data.py).
+use_session_filter = true
+session_start_hour = 10
+session_end_hour = 20
 
 [data]
 # Paths are relative to the project root.

@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from goldbot.data import find_problems, load_mt5_csv
+from goldbot.data import drop_forming_bar, find_problems, load_mt5_csv
 
 HEADER = "<DATE>\t<TIME>\t<OPEN>\t<HIGH>\t<LOW>\t<CLOSE>\t<TICKVOL>\t<VOL>\t<SPREAD>"
 
@@ -79,3 +79,19 @@ def test_classifies_gaps():
     assert len(report["short_gaps"]) == 1
     assert len(report["long_gaps"]) == 2
     assert len(report["weekend_gaps"]) == 1
+
+
+# ---------- Closed-bar rule ----------
+
+def test_forming_bar_is_dropped():
+    bars = make_bars(["2026-11-09 09:00", "2026-11-09 10:00"])
+    # At 10:12 the 10:00 H1 bar is still forming (it closes at 11:00).
+    result = drop_forming_bar(bars, now=pd.Timestamp("2026-11-09 10:12"), timeframe="H1")
+    assert list(result.index) == [pd.Timestamp("2026-11-09 09:00")]
+
+
+def test_closed_bar_is_kept():
+    bars = make_bars(["2026-11-09 09:00", "2026-11-09 10:00"])
+    # At exactly 11:00 the 10:00 bar has closed, so keep it.
+    result = drop_forming_bar(bars, now=pd.Timestamp("2026-11-09 11:00"), timeframe="H1")
+    assert len(result) == 2

@@ -5,13 +5,13 @@ Rule-based trading bot for **gold (XAUUSD)** on **MetaTrader 5**, in Python. It'
 
 ## Current status  ← update this at the end of every step / session
 
-- **Current step:** Step 3: Strategy as a pure function (not started)
-- **Last completed:** Step 2: Indicators by hand (2026-11-10). EMA/ATR match MT5's Data Window
-  exactly (to MT5's 3 decimals).
-- **Next action:** The user commits Step 2. Then start Step 3: teach the closed-bar rule and how
-  to define a "cross" precisely; build `goldbot/strategy.py` (a `Signal` dataclass +
-  `generate_signal`) and `tests/test_strategy.py`, and add the remaining strategy params
-  (SL ATR multiple, R:R, session window) to config.
+- **Current step:** Step 3: Strategy as a pure function (code built, 37 tests pass; user
+  verification pending)
+- **Last completed:** Step 2: Indicators by hand (2026-11-10, commit `49120c6`)
+- **Next action:** The user checks one signal on the MT5 chart (2026-10-29 11:00 sell: EMA20
+  crosses below EMA50 on that bar, close below EMA200). They also do the exercise of turning
+  `use_session_filter` off, re-running `python -m scripts.show_signals`, and turning it back on.
+  Then they commit, and we start Step 4 (risk and position sizing).
 - **Open questions / blockers:**
   - Broker not chosen yet (using MetaQuotes-Demo).
 - **Account facts (demo):** MetaQuotes-Demo, **hedging** account type, USD, balance ≈ $2,547,

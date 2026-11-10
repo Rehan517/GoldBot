@@ -40,6 +40,21 @@ def load_mt5_csv(path: str | Path) -> pd.DataFrame:
     return df
 
 
+def drop_forming_bar(bars: pd.DataFrame, now: pd.Timestamp, timeframe: str) -> pd.DataFrame:
+    """Remove the last bar if it hasn't closed yet at time `now` (both in server time).
+
+    A bar that OPENS at 10:00 on H1 CLOSES at 11:00. Before 11:00 its high/low/close are
+    still changing, so the strategy must not see it. `now` is passed in rather than read
+    from the clock, so this function stays pure and easy to test.
+    """
+    if bars.empty:
+        return bars
+    bar_close_time = bars.index[-1] + pd.Timedelta(minutes=TIMEFRAME_MINUTES[timeframe])
+    if now < bar_close_time:
+        return bars.iloc[:-1]
+    return bars
+
+
 def find_problems(bars: pd.DataFrame, timeframe: str) -> dict:
     """Check bar data for anything that could mislead a backtest.
 

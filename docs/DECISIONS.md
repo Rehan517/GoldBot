@@ -48,3 +48,18 @@ don't silently change an old one. If a decision is reversed, mark it **Supersede
 - **Outcome:** MT5's Specification window really does display 0.1, but a live 0.01-lot demo
   trade proved the true value is 1.0 ($2.08 move → $2.08 profit). **Rule: measured P/L beats
   displayed specs.** Re-run this test whenever the broker or account changes.
+
+### D-7: A stateless strategy whose signals carry distances (2026-11-10)
+- **Choice:** `strategy.py` only answers "is there an entry signal on the latest closed bar?"
+  It knows nothing about open positions, account size, spread, or the clock. A `Signal` holds
+  stop/target **distances**. SL/TP prices are computed from the actual fill price.
+- **Why:** The backtest and live bot share identical rules. The fill price isn't known when the
+  signal fires (next bar open + spread), so distances keep the intended risk exact. Position
+  state, sizing, and safety belong to the backtester/live loop, `risk.py`, and `guards.py`.
+
+### D-8: Session filter of 10:00–20:00 server time (2026-11-10)
+- **Choice:** Only enter when the entry time is in [10:00, 20:00) server time
+  (≈ 08:00 London to 13:00 New York). It's configurable and can be switched off.
+- **Why:** These are the most active hours (from check_data.py's activity profile).
+  **Unproven:** it blocked the Nov 4 2026 cross, which would have been a big winner. Test it on
+  vs off in Step 6.
